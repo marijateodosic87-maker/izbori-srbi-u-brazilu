@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="sr-Latn">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Srbi u Brazilu · Izbori 2026</title>
+<meta name="description" content="Uputstvo za prijavu Ambasadi i zajednička lista Srba u Brazilu za izbore 2026. Cilj: 100 prijavljenih za glasačko mesto u São Paulu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Figtree:wght@400;500;600;700&display=swap">
+<script>
+  // ====== PODEŠAVANJA ======
+  // API_URL: link Google Apps Script web aplikacije (vidi README.md).
+  // Dok je prazan, sajt radi u DEMO režimu i upisi se čuvaju samo u ovom pregledaču.
+  window.CONFIG = {
+    API_URL: "",
+    CILJ: 100,
+    ROK: "2026-10-03T19:00:00-03:00",  // rok za prijavu: 3. oktobar u 19:00, vreme u Brazilu (UTC−3); interni presek u 15:00
+    EMAIL: "embaixadaservia@terra.com.br",
+    UPUTSTVO_URL: "",   // link ka zvaničnom uputstvu (ako je prazno, vodi na korake ispod)
+    PDF_URL: ""         // link ka PDF smernicama (ako je prazno, dugme piše „uskoro")
+  };
+</script>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0b1522;
+    --bg-2: #0f1c2c;
+    --panel: #122235;
+    --panel-2: #172a40;
+    --line: #243a54;
+    --line-2: #2f4a68;
+    --text: #eef2f7;
+    --muted: #a3b2c5;
+    --faint: #6f8199;
+    --gold: #e7c088;
+    --gold-ink: #1b1409;
+    --gold-soft: rgba(231, 192, 136, .12);
+    --ok: #7fd1a8;
+    --err: #f19a8e;
+    --ring-track: #2a4059;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --r: 14px;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body {
+    background: radial-gradient(1200px 500px at 90% -10%, #16304d 0%, transparent 60%), var(--bg);
+    color: var(--text);
+    font: 15px/1.6 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--gold); }
+  a:focus-visible, button:focus-visible, input:focus-visible, .btn:focus-visible {
+    outline: 2px solid var(--gold); outline-offset: 2px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+
+  /* Header */
+  header.top { border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .06em; font-size: 13px; text-transform: uppercase; }
+  .badge100 { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--gold); display: grid; place-items: center; font-size: 12px; color: var(--text); letter-spacing: 0; }
+  .flags { display: inline-flex; gap: 6px; font-size: 16px; }
+  .top-note { color: var(--muted); font-size: 13px; }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1fr 260px; gap: 40px; align-items: center; padding-block: 48px 36px; }
+  .heart { width: 100%; max-width: 210px; justify-self: center; filter: drop-shadow(0 12px 28px rgba(0,0,0,.45)); }
+  .heart svg { display: block; width: 100%; height: auto; }
+  .status { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .deadline { background: linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; text-align: center; display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+  .deadline h2 { font: 700 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  .deadline .when { font: 700 30px/1.1 var(--serif); margin: 0; text-wrap: balance; }
+  .deadline .when span { color: var(--gold); }
+  .deadline .tz { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+  .cd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .cd div { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 4px 10px; }
+  .cd b { display: block; font: 700 38px/1 var(--sans); font-variant-numeric: tabular-nums; }
+  .cd small { display: block; color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .cd-done { font-weight: 600; color: var(--gold); margin: 0; }
+  .presek { margin: 0; font-size: 13px; color: var(--muted); background: var(--gold-soft); border: 1px solid rgba(231,192,136,.3); border-radius: 10px; padding: 10px 12px; text-align: left; }
+  .presek strong { color: var(--text); } .presek b { color: var(--gold); }
+  .eyebrow { color: var(--gold); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 14px; }
+  h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(38px, 6vw, 60px); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 20px; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--gold); }
+  .lede { color: var(--muted); font-size: 17px; max-width: 34em; margin: 0 0 26px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 10px; font: 600 14px/1.2 var(--sans); text-decoration: none; cursor: pointer; border: 1px solid var(--line-2); background: transparent; color: var(--text); transition: background .15s, border-color .15s, transform .15s; }
+  .btn:hover { background: var(--panel-2); border-color: var(--faint); }
+  .btn.primary { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+  .btn.primary:hover { background: #f0cf9d; }
+  .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+  .btn small { font-weight: 500; opacity: .75; }
+
+  /* Goal card */
+  .goal { background: linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; text-align: center; }
+  .goal h2 { font: 700 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 18px; }
+  .ring { position: relative; width: 200px; max-width: 100%; aspect-ratio: 1; margin: 0 auto 18px; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 14; }
+  .ring .track { stroke: var(--ring-track); }
+  .ring .bar { stroke: var(--gold); stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1); }
+  .ring .center { position: absolute; inset: 0; display: grid; place-content: center; }
+  .ring .num { font: 700 52px/1 var(--sans); font-variant-numeric: tabular-nums; }
+  .ring .of { color: var(--muted); font-size: 13px; margin-top: 6px; }
+  .goal .left { font-weight: 600; margin: 0 0 8px; }
+  .goal .left b { color: var(--gold); }
+  .goal .fine { color: var(--faint); font-size: 12px; margin: 0; }
+
+  /* Notice */
+  .notice { display: flex; gap: 14px; align-items: flex-start; background: rgba(231,192,136,.07); border: 1px solid rgba(231,192,136,.28); border-radius: var(--r); padding: 16px 20px; margin-bottom: 28px; }
+  .notice .mark { color: var(--gold); font-size: 18px; line-height: 1.4; }
+  .notice p { margin: 0; }
+  .demo { background: rgba(127, 209, 168, .08); border-color: rgba(127, 209, 168, .3); }
+  .demo .mark { color: var(--ok); }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); gap: 20px; align-items: start; padding-bottom: 48px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .card h2 { font: 700 26px/1.15 var(--serif); margin: 0 0 4px; }
+  .card .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .stack { display: grid; gap: 20px; }
+
+  ol.steps { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 16px; counter-reset: s; }
+  ol.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; counter-increment: s; font-size: 14px; }
+  ol.steps li::before { content: counter(s); width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--gold); color: var(--gold); display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .mailbox { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+  .mailbox code { font: 500 13px/1.3 ui-monospace, "SF Mono", Menlo, monospace; background: var(--bg-2); border: 1px solid var(--line); padding: 5px 8px; border-radius: 7px; user-select: all; word-break: break-all; }
+  .copy { font: 600 12px var(--sans); color: var(--gold); background: none; border: 0; cursor: pointer; padding: 4px 2px; }
+  .step-actions { display: grid; gap: 8px; }
+  .step-actions .btn { justify-content: space-between; width: 100%; }
+
+  /* Form */
+  form { display: grid; gap: 14px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label.f { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  label.f .opt { font-weight: 500; color: var(--faint); }
+  input[type=text] { width: 100%; font: 500 15px var(--sans); color: var(--text); background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 11px 12px; }
+  input[type=text]::placeholder { color: var(--faint); }
+  input[type=text]:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px var(--gold-soft); }
+  .consent { display: grid; grid-template-columns: 20px 1fr; gap: 10px; font-size: 13px; color: var(--muted); align-items: start; }
+  .consent input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--gold); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .msg { font-size: 13px; min-height: 1.2em; margin: 0; }
+  .msg.ok { color: var(--ok); } .msg.err { color: var(--err); }
+  form .btn.primary { justify-content: center; }
+
+  /* List */
+  .list-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .pill { border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .search { margin: 0 0 12px; }
+  .table-wrap { overflow-x: auto; max-height: 560px; overflow-y: auto; border-top: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { position: sticky; top: 0; background: var(--panel); text-align: left; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 12px 10px; border-bottom: 1px solid var(--line); }
+  td { padding: 11px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.n { width: 44px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  td.city { color: var(--muted); }
+  td.date { color: var(--faint); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  tr.fresh td { background: var(--gold-soft); }
+  .add-city { font: 600 13px var(--sans); color: var(--gold); background: none; border: 1px dashed rgba(231,192,136,.45); border-radius: 8px; padding: 3px 9px; cursor: pointer; }
+  .add-city:hover { background: var(--gold-soft); }
+  .city-edit { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .city-edit input[type=text] { width: 150px; padding: 6px 8px; font-size: 14px; }
+  .city-edit button { font: 600 12px var(--sans); border-radius: 8px; padding: 6px 10px; cursor: pointer; border: 1px solid var(--line-2); background: transparent; color: var(--text); }
+  .city-edit button.save { background: var(--gold); border-color: var(--gold); color: var(--gold-ink); }
+  .city-edit .e { color: var(--err); font-size: 12px; width: 100%; }
+  .empty { text-align: center; padding: 40px 16px; color: var(--muted); }
+  .empty strong { display: block; color: var(--text); margin-bottom: 4px; }
+
+  footer { border-top: 1px solid var(--line); color: var(--faint); font-size: 12px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-block: 20px; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; gap: 28px; padding-block: 32px 24px; }
+    .heart { max-width: 150px; order: -1; justify-self: start; }
+    .status { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding-inline: 16px; }
+    .top-note { display: none; }
+    .row2 { grid-template-columns: 1fr; }
+    td.date, th.date { display: none; }
+    .card { padding: 20px 16px; }
+    .cd b { font-size: 28px; }
+    .deadline .when { font-size: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ring .bar, .btn { transition: none; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="badge100">100</span> Srbi u Brazilu <span class="flags" aria-hidden="true">🇷🇸 🇧🇷</span></div>
+    <div class="top-note">Zajedno do 100 prijava</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Srbija × Brazil · Izbori u nedelju, 25. 10. 2026.</p>
+      <h1>Naš glas se <em>čuje</em> i iz Brazila.</h1>
+      <p class="lede">Pronađite uputstvo za prijavu Ambasadi i pratite koliko nas se upisalo na zajedničku listu. Cilj je 100 prijavljenih, kako bi nam otvorili glasačko mesto u São Paulu.</p>
+      <div class="actions">
+        <a class="btn primary" href="#koraci">Kako da se prijavim ↓</a>
+        <a class="btn" href="#lista">Pogledaj listu ↓</a>
+      </div>
+    </div>
+
+    <div class="heart" role="img" aria-label="Srce od srpske i brazilske zastave">
+      <svg viewBox="0 0 200 180" aria-hidden="true">
+        <defs>
+          <clipPath id="heart-clip"><path d="M100 170 C 40 128 6 96 6 58 C 6 26 30 6 58 6 C 78 6 93 18 100 36 C 107 18 122 6 142 6 C 170 6 194 26 194 58 C 194 96 160 128 100 170 Z"></path></clipPath>
+          <linearGradient id="heart-gold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f6dca6"></stop>
+            <stop offset=".5" stop-color="#e2b865"></stop>
+            <stop offset="1" stop-color="#b8863a"></stop>
+          </linearGradient>
+        </defs>
+        <g clip-path="url(#heart-clip)">
+          <!-- Srbija: crvena, plava, bela -->
+          <rect x="0" y="0" width="100" height="62" fill="#C6363C"></rect>
+          <rect x="0" y="62" width="100" height="52" fill="#0C4076"></rect>
+          <rect x="0" y="114" width="100" height="70" fill="#F4F4F2"></rect>
+          <!-- Brazil: zelena, žuti romb, plavi globus s trakom i zvezdama -->
+          <rect x="100" y="0" width="100" height="180" fill="#009C3B"></rect>
+          <polygon points="103,80 150,36 197,80 150,124" fill="#FEDF00"></polygon>
+          <circle cx="150" cy="80" r="29" fill="#002776"></circle>
+          <path d="M121.4 75 C 139 66 162 68 178.8 80 L 178.2 86 C 162 74 139 72 121.6 81 Z" fill="#FFFFFF"></path>
+          <g fill="#FFFFFF"><circle cx="138" cy="90" r="1.3"></circle><circle cx="145" cy="95" r="1.1"></circle><circle cx="152" cy="92" r="1.4"></circle><circle cx="158" cy="98" r="1.1"></circle><circle cx="147" cy="102" r="1.2"></circle><circle cx="141" cy="99" r="0.9"></circle><circle cx="163" cy="90" r="1"></circle><circle cx="155" cy="104" r="0.9"></circle><circle cx="135" cy="96" r="0.8"></circle><circle cx="150" cy="86" r="0.9"></circle><circle cx="160" cy="84" r="0.8"></circle><circle cx="144" cy="108" r="0.8"></circle></g>
+        </g>
+        <line x1="100" y1="36" x2="100" y2="170" stroke="url(#heart-gold)" stroke-width="1.6"></line>
+        <path d="M100 170 C 40 128 6 96 6 58 C 6 26 30 6 58 6 C 78 6 93 18 100 36 C 107 18 122 6 142 6 C 170 6 194 26 194 58 C 194 96 160 128 100 170 Z" fill="none" stroke="url(#heart-gold)" stroke-width="5" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+  </section>
+
+  <section class="status" aria-label="Cilj i rok">
+    <aside class="goal" aria-labelledby="goal-h">
+      <h2 id="goal-h">Naš zajednički cilj</h2>
+      <div class="ring" role="img" id="ring-label" aria-label="0 od 100 prijavljenih">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="track" cx="100" cy="100" r="86"></circle>
+          <circle class="bar" id="ring-bar" cx="100" cy="100" r="86"></circle>
+        </svg>
+        <div class="center">
+          <div class="num" id="count">0</div>
+          <div class="of" id="count-of">od 100 ljudi</div>
+        </div>
+      </div>
+      <p class="left" id="left">Još <b>100 ljudi</b> do cilja</p>
+      <p class="fine">Broj prikazuje upise na ovom sajtu, a ne zvaničan broj prijava koje je potvrdila Ambasada.</p>
+    </aside>
+
+    <aside class="deadline" aria-labelledby="rok-h">
+      <h2 id="rok-h">Rok za prijavu Ambasadi</h2>
+      <div>
+        <p class="when">Subota, <span>3. oktobar</span> u 19:00</p>
+        <p class="tz">po vremenu u Brazilu (Brasília, UTC−3) · u Srbiji ponoć</p>
+      </div>
+      <div class="cd" id="cd" role="timer" aria-live="off">
+        <div><b id="cd-d">0</b><small id="cd-dl">dana</small></div>
+        <div><b id="cd-h">00</b><small id="cd-hl">sati</small></div>
+        <div><b id="cd-m">00</b><small id="cd-ml">minuta</small></div>
+        <div><b id="cd-s">00</b><small id="cd-sl">sekundi</small></div>
+      </div>
+      <p class="cd-done" id="cd-done" hidden>Rok za prijavu je istekao.</p>
+      <p class="presek"><strong>Ne ostavljajte prijavu za poslednji čas.</strong> Interni presek liste pravimo u <b>15:00</b>, pa vas molimo da do tada pošaljete email Ambasadi i upišete se ovde.</p>
+    </aside>
+  </section>
+
+  <div class="notice demo" id="demo-note" hidden>
+    <span class="mark" aria-hidden="true">●</span>
+    <p id="demo-text"><strong>Demo režim.</strong> Sajt još nije povezan sa zajedničkom listom, pa se upisi čuvaju samo u ovom pregledaču.</p>
+  </div>
+
+  <div class="notice" role="note">
+    <span class="mark" aria-hidden="true">✳</span>
+    <p><strong>Rok: subota, 3. oktobar u 19:00 (vreme u Brazilu), a interni presek liste je u 15:00.</strong> Na listu se mogu upisati samo građani koji su prethodno poslali prijavu na <span class="email-text">embaixadaservia@terra.com.br</span>. Upis na ovaj sajt ne zamenjuje prijavu Ambasadi.</p>
+  </div>
+
+  <div class="grid">
+    <div class="stack">
+      <section class="card" id="koraci">
+        <h2>Kako da se prijavite</h2>
+        <p class="sub">Tri koraka do upisa na zajedničku listu.</p>
+        <ol class="steps">
+          <li><div>Otvorite uputstvo i preuzmite smernice za prijavu.</div></li>
+          <li><div>Pošaljite prijavu na email Ambasade:
+            <div class="mailbox"><code class="email-text">embaixadaservia@terra.com.br</code><button class="copy" type="button" id="copy-email">Kopiraj</button></div>
+          </div></li>
+          <li><div>Nakon slanja emaila, upišite se na listu ispod.</div></li>
+        </ol>
+        <div class="step-actions">
+          <a class="btn" id="btn-uputstvo" href="#koraci">Pročitaj uputstvo <span aria-hidden="true">↗</span></a>
+          <a class="btn" id="btn-pdf" href="#" target="_blank" rel="noopener">Preuzmi smernice (PDF) <small id="pdf-note">PDF</small></a>
+          <a class="btn" id="btn-mail" href="mailto:embaixadaservia@terra.com.br">Pošalji email Ambasadi <span aria-hidden="true">✉</span></a>
+        </div>
+      </section>
+
+      <section class="card" id="upis">
+        <h2>Upis na listu</h2>
+        <p class="sub">Upišite se tek kada pošaljete prijavu Ambasadi.</p>
+        <form id="form" novalidate>
+          <div class="row2">
+            <label class="f" for="ime">Ime
+              <input type="text" id="ime" name="ime" autocomplete="given-name" maxlength="40" required placeholder="npr. Milica">
+            </label>
+            <label class="f" for="prezime">Prezime
+              <input type="text" id="prezime" name="prezime" autocomplete="family-name" maxlength="40" required placeholder="npr. Jovanović">
+            </label>
+          </div>
+          <label class="f" for="mesto">Mesto u Brazilu <span class="opt">(nije obavezno)</span>
+            <input type="text" id="mesto" name="mesto" list="gradovi" maxlength="50" placeholder="npr. São Paulo">
+          </label>
+          <datalist id="gradovi">
+            <option value="São Paulo"></option><option value="Rio de Janeiro"></option><option value="Brasília"></option>
+            <option value="Belo Horizonte"></option><option value="Curitiba"></option><option value="Porto Alegre"></option>
+            <option value="Florianópolis"></option><option value="Salvador"></option><option value="Recife"></option>
+            <option value="Fortaleza"></option><option value="Campinas"></option><option value="Santos"></option>
+          </datalist>
+          <div class="hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+          <label class="consent" for="saglasnost">
+            <input type="checkbox" id="saglasnost" name="saglasnost" required>
+            <span>Potvrđujem da sam poslao/la prijavu Ambasadi i saglasan/na sam da se moje ime, prezime i mesto javno prikažu na listi.</span>
+          </label>
+          <button class="btn primary" type="submit" id="submit">Upiši me na listu</button>
+          <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </div>
+
+    <section class="card" id="lista">
+      <div class="list-head">
+        <div>
+          <h2>Lista prijavljenih</h2>
+          <p class="sub">Građani koji su poslali prijavu Ambasadi i pristali da budu javno prikazani.</p>
+        </div>
+        <span class="pill" id="pill">0 osoba</span>
+      </div>
+      <div class="search">
+        <label class="f" for="trazi"><span class="hp">Pretraga</span>
+          <input type="text" id="trazi" placeholder="Pretraži po imenu ili mestu…" autocomplete="off">
+        </label>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Ime i prezime</th><th>Mesto u Brazilu</th><th class="date">Upisan/a</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="empty" id="empty">
+          <strong>Lista je spremna za prve prijave</strong>
+          Budite prvi: pošaljite prijavu Ambasadi, pa se upišite.
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Izbori 2026 · Srbi u Brazilu</span>
+    <span>Ova lista nije evidencija Ambasade. Služi nam da se lakše prebrojimo. ♡</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const C = window.CONFIG;
+  const R = 86, CIRC = 2 * Math.PI * R;
+  const $ = (id) => document.getElementById(id);
+
+  let rows = [];
+  let freshKey = null;
+  let backend = null;      // izabrani izvor podataka
+  let canWrite = true;
+
+  // ---- Linkovi / dugmad ----
+  document.querySelectorAll(".email-text").forEach((el) => (el.textContent = C.EMAIL));
+  $("btn-mail").href = "mailto:" + C.EMAIL;
+  if (C.UPUTSTVO_URL) { $("btn-uputstvo").href = C.UPUTSTVO_URL; $("btn-uputstvo").target = "_blank"; $("btn-uputstvo").rel = "noopener"; }
+  if (C.PDF_URL) { $("btn-pdf").href = C.PDF_URL; }
+  else {
+    $("btn-pdf").setAttribute("aria-disabled", "true");
+    $("pdf-note").textContent = "uskoro";
+    $("btn-pdf").addEventListener("click", (e) => e.preventDefault());
+  }
+  $("copy-email").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(C.EMAIL); $("copy-email").textContent = "Kopirano ✓"; }
+    catch { const r = document.createRange(); r.selectNodeContents(document.querySelector("code.email-text")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copy-email").textContent = "Označeno"; }
+    setTimeout(() => ($("copy-email").textContent = "Kopiraj"), 2000);
+  });
+
+  // ---- Pomoćne ----
+  const clean = (s, max) => String(s || "").replace(/[​-‍⁠﻿]/g, "").replace(/[<>]/g, "").replace(/Ð/g, "Đ").replace(/ð/g, "đ").replace(/\s+/g, " ").trim().slice(0, max);
+  const norm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[đð]/gi, "dj").toLowerCase().replace(/\s+/g, " ").trim();
+  const keyOf = (r) => norm(r.ime) + "|" + norm(r.prezime);
+  const fullName = (r) => (r.ime + " " + (r.prezime || "")).trim();
+  const osoba = (n) => { const m10 = n % 10, m100 = n % 100; return (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? "osobe" : "osoba"; };
+  const ljudi = (n) => (n === 1 ? "čovek" : "ljudi");
+  const fmtDate = (v) => { if (!v) return ""; const d = new Date(v); return isNaN(d) ? "" : d.toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "numeric", year: "numeric" }); };
+
+  // ---- Prikaz ----
+  function renderCount() {
+    const n = rows.length, goal = C.CILJ;
+    const bar = $("ring-bar");
+    bar.style.strokeDasharray = CIRC;
+    bar.style.strokeDashoffset = CIRC * (1 - Math.min(n / goal, 1));
+    $("count").textContent = n;
+    $("count-of").textContent = "od " + goal + " ljudi";
+    $("ring-label").setAttribute("aria-label", n + " od " + goal + " prijavljenih");
+    const left = goal - n;
+    $("left").innerHTML = left > 0 ? "Još <b>" + left + " " + ljudi(left) + "</b> do cilja" : "<b>Cilj je dostignut!</b> Hvala svima.";
+    $("pill").textContent = n + " " + osoba(n);
+  }
+
+  function renderList() {
+    const q = norm($("trazi").value);
+    const tbody = $("rows");
+    tbody.replaceChildren();
+    rows.forEach((r, i) => {
+      if (q && !norm(fullName(r) + " " + (r.mesto || "")).includes(q)) return;
+      const tr = document.createElement("tr");
+      if (keyOf(r) === freshKey) tr.className = "fresh";
+      const tdN = td(String(i + 1), "n");
+      const tdName = td("", "");
+      const nameSpan = document.createElement("span"); nameSpan.textContent = r.ime;
+      tdName.appendChild(nameSpan);
+      if (r.prezime) nameSpan.textContent = fullName(r);
+      else if (canWrite) { tdName.append(" "); tdName.appendChild(addButton(r, "prezime")); }
+      const tdCity = td(r.mesto || "", "city");
+      if (!r.mesto && canWrite) tdCity.replaceChildren(addButton(r, "mesto"));
+      tr.append(tdN, tdName, tdCity, td(fmtDate(r.vreme) || "—", "date"));
+      tbody.appendChild(tr);
+    });
+    $("empty").hidden = rows.length > 0;
+  }
+  function td(t, c) { const el = document.createElement("td"); if (c) el.className = c; el.textContent = t; return el; }
+  function render() { renderCount(); renderList(); }
+
+  // ---- Naknadna dopuna prezimena / mesta ----
+  const LABEL = { mesto: { btn: "+ dodaj mesto", ph: "npr. São Paulo", aria: "Mesto u Brazilu", max: 50 },
+                  prezime: { btn: "+ dodaj prezime", ph: "Prezime", aria: "Prezime", max: 40 } };
+
+  function addButton(r, field) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "add-city"; b.textContent = LABEL[field].btn;
+    b.setAttribute("aria-label", LABEL[field].btn.slice(2) + " za " + fullName(r));
+    b.addEventListener("click", () => openEdit(b, r, field));
+    return b;
+  }
+
+  function openEdit(btn, r, field) {
+    const L = LABEL[field];
+    const box = document.createElement("div"); box.className = "city-edit";
+    const inp = document.createElement("input");
+    inp.type = "text"; inp.id = field + "-" + r.id; inp.maxLength = L.max; inp.placeholder = L.ph;
+    inp.setAttribute("aria-label", L.aria);
+    if (field === "mesto") inp.setAttribute("list", "gradovi");
+    const save = document.createElement("button"); save.type = "button"; save.className = "save"; save.textContent = "Sačuvaj";
+    const cancel = document.createElement("button"); cancel.type = "button"; cancel.textContent = "Otkaži";
+    const err = document.createElement("span"); err.className = "e"; err.setAttribute("role", "status");
+    box.append(inp, save, cancel, err);
+    btn.replaceWith(box);
+    inp.focus();
+
+    cancel.addEventListener("click", () => box.replaceWith(addButton(r, field)));
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") save.click(); if (e.key === "Escape") cancel.click(); });
+    save.addEventListener("click", async () => {
+      const value = clean(inp.value, L.max);
+      if (!value) { err.textContent = "Polje je prazno."; inp.focus(); return; }
+      if (field === "prezime" && rows.some((x) => x.id !== r.id && keyOf(x) === keyOf({ ime: r.ime, prezime: value }))) {
+        err.textContent = r.ime + " " + value + " je već na listi."; return;
+      }
+      save.disabled = true; save.textContent = "Čuvam…"; err.textContent = "";
+      try {
+        const res = await backend.patch(r.id, field, value);
+        if (res.ok) { if (backend.reload) await backend.reload(); }
+        else { err.textContent = res.error || "Čuvanje nije uspelo."; save.disabled = false; save.textContent = "Sačuvaj"; }
+      } catch {
+        err.textContent = "Čuvanje nije uspelo. Pokušajte ponovo."; save.disabled = false; save.textContent = "Sačuvaj";
+      }
+    });
+  }
+
+  // ---- Izvori podataka ----
+  const sortRows = (list) => list.slice().sort((a, b) => (a.rb || 0) - (b.rb || 0));
+
+  // 1) claude.ai stranica: deljena baza
+  function dbBackend(db) {
+    const col = db.collection("prijave");
+    return {
+      start(onRows) {
+        col.onSnapshot(
+          (snap) => onRows(sortRows(snap.docs.map((d) => Object.assign({ id: d.id }, d.data())))),
+          () => showNote("Lista trenutno nije dostupna. Osvežite stranicu.")
+        );
+      },
+      async add(e) {
+        await col.add({ ime: e.ime, prezime: e.prezime, mesto: e.mesto, vreme: new Date().toISOString(), rb: Date.now() });
+        return { ok: true };
+      },
+      async patch(id, field, value) {
+        const ref = col.doc(id);
+        const snap = await ref.get();
+        if (!snap.exists) return { ok: false, error: "Osoba nije pronađena." };
+        if (String(snap.data()[field] || "").trim()) return { ok: false, error: "Već je upisano." };
+        await ref.update({ [field]: value });
+        return { ok: true };
+      }
+    };
+  }
+
+  // 2) samostalni sajt: Google Apps Script
+  function sheetBackend(url) {
+    let cb = () => {};
+    const post = (body) => fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then((r) => r.json());
+    const api = {
+      async reload() {
+        try { const d = await (await fetch(url, { cache: "no-store" })).json(); if (d.ok) cb(d.rows || []); } catch (e) { console.warn(e); }
+      },
+      start(onRows) { cb = onRows; api.reload(); setInterval(api.reload, 60000); },
+      add: (e) => post(e),
+      patch: (id, field, value) => post({ action: "dopuna", id, field, value })
+    };
+    return api;
+  }
+
+  // 3) demo: samo u ovom pregledaču
+  function localBackend() {
+    const KEY = "srbi-brazil-lista";
+    let cb = () => {};
+    const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
+    const write = (l) => { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch {} };
+    const api = {
+      async reload() { cb(sortRows(read())); },
+      start(onRows) { cb = onRows; api.reload(); },
+      async add(e) { const l = read(); l.push({ id: "l" + Date.now(), ime: e.ime, prezime: e.prezime, mesto: e.mesto, vreme: new Date().toISOString(), rb: Date.now() }); write(l); return { ok: true }; },
+      async patch(id, field, value) { const l = read(); const x = l.find((y) => y.id === id); if (!x) return { ok: false, error: "Osoba nije pronađena." }; if (x[field]) return { ok: false, error: "Već je upisano." }; x[field] = value; write(l); return { ok: true }; }
+    };
+    return api;
+  }
+
+  function showNote(html) { $("demo-text").innerHTML = html; $("demo-note").hidden = false; }
+
+  function setReadOnly() {
+    canWrite = false;
+    $("upis").hidden = true;
+    render();
+  }
+
+  async function boot() {
+    if (window.claude && typeof window.claude.use === "function") {
+      const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user").catch(() => null)]);
+      if (!db) { showNote("Lista nije dostupna u ovom prikazu."); setReadOnly(); return; }
+      backend = dbBackend(db);
+      if (user && typeof user.can === "function") {
+        const w = await Promise.resolve(user.can("data.write")).catch(() => null);
+        if (w === false) { setReadOnly(); showNote("Imate pristup samo za pregled liste."); }
+      }
+    } else if (C.API_URL) {
+      backend = sheetBackend(C.API_URL);
+    } else {
+      backend = localBackend();
+      $("demo-note").hidden = false;
+    }
+    backend.start((list) => { rows = list; render(); });
+  }
+
+  // ---- Upis ----
+  const msg = (t, cls) => { $("msg").textContent = t; $("msg").className = "msg " + (cls || ""); };
+
+  $("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const entry = {
+      ime: clean($("ime").value, 40),
+      prezime: clean($("prezime").value, 40),
+      mesto: clean($("mesto").value, 50),
+      saglasnost: $("saglasnost").checked,
+      website: $("website").value
+    };
+    if (entry.website) return;
+    if (!entry.ime || !entry.prezime) { msg("Upišite ime i prezime.", "err"); (entry.ime ? $("prezime") : $("ime")).focus(); return; }
+    if (!entry.saglasnost) { msg("Označite potvrdu da ste poslali prijavu Ambasadi.", "err"); $("saglasnost").focus(); return; }
+    if (rows.some((r) => keyOf(r) === keyOf(entry))) { msg(fullName(entry) + " je već na listi.", "err"); return; }
+    const sameFirst = rows.find((r) => !r.prezime && norm(r.ime) === norm(entry.ime));
+    if (!backend) { msg("Lista se još učitava. Pokušajte za trenutak.", "err"); return; }
+
+    const btn = $("submit");
+    btn.disabled = true; btn.textContent = "Upisujem…"; msg("");
+    try {
+      const r = await backend.add(entry);
+      if (r.ok) {
+        freshKey = keyOf(entry);
+        $("form").reset();
+        msg(sameFirst ? "Upisani ste. Ako ste vi „" + sameFirst.ime + "” bez prezimena na listi, samo dopunite prezime tamo." : "Upisani ste na listu. Hvala! ♡", "ok");
+        if (backend.reload) await backend.reload();
+      } else if (r.error === "duplikat") {
+        msg("Ova osoba je već na listi.", "err");
+      } else {
+        msg(r.error || "Upis nije uspeo. Pokušajte ponovo.", "err");
+      }
+    } catch {
+      msg("Upis nije uspeo. Proverite internet i pokušajte ponovo.", "err");
+    } finally {
+      btn.disabled = false; btn.textContent = "Upiši me na listu";
+    }
+  });
+
+  $("trazi").addEventListener("input", renderList);
+
+  // ---- Odbrojavanje do roka ----
+  const plural = (n, one, few, many) => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? few : many; };
+  const pad = (n) => String(n).padStart(2, "0");
+  const deadline = new Date(C.ROK).getTime();
+  function tick() {
+    let t = Math.max(0, Math.floor((deadline - Date.now()) / 1000));
+    if (t === 0) { $("cd").hidden = true; $("cd-done").hidden = false; return false; }
+    const d = Math.floor(t / 86400), h = Math.floor(t % 86400 / 3600), m = Math.floor(t % 3600 / 60), sec = t % 60;
+    $("cd-d").textContent = d; $("cd-dl").textContent = plural(d, "dan", "dana", "dana");
+    $("cd-h").textContent = pad(h); $("cd-hl").textContent = plural(h, "sat", "sata", "sati");
+    $("cd-m").textContent = pad(m); $("cd-ml").textContent = plural(m, "minut", "minuta", "minuta");
+    $("cd-s").textContent = pad(sec); $("cd-sl").textContent = plural(sec, "sekund", "sekunde", "sekundi");
+    $("cd").setAttribute("aria-label", "Do roka: " + d + " " + plural(d, "dan", "dana", "dana") + ", " + h + " h, " + m + " min");
+    return true;
+  }
+  if (tick()) { const iv = setInterval(() => { if (!tick()) clearInterval(iv); }, 1000); }
+
+  render();
+  boot();
+})();
+</script>
