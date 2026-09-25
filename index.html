@@ -12,12 +12,12 @@
   // API_URL: link Google Apps Script web aplikacije (vidi README.md).
   // Dok je prazan, sajt radi u DEMO režimu i upisi se čuvaju samo u ovom pregledaču.
   window.CONFIG = {
-    API_URL: "https://script.google.com/macros/s/AKfycbxMIs-RgwOKN3FhOlcyoPK4W5P_SEYSnw9gH_tzjo9kFLoQIzERwcoIEmHxhsu-pTs/exec",
+    API_URL: "",
     CILJ: 100,
     ROK: "2026-10-03T19:00:00-03:00",  // rok za prijavu: 3. oktobar u 19:00, vreme u Brazilu (UTC−3); interni presek u 15:00
     EMAIL: "embaixadaservia@terra.com.br",
-    UPUTSTVO_URL: "https://brasilia.mfa.gov.rs/mediji/aktivnosti/izbori-prijavljivanje-za-glasanje-u-inostranstvu",
-        PDF_URL: "zahtev.pdf"
+    UPUTSTVO_URL: "https://brasilia.mfa.gov.rs/mediji/aktivnosti/izbori-prijavljivanje-za-glasanje-u-inostranstvu",   // link ka zvaničnom uputstvu (ako je prazno, vodi na korake ispod)
+    PDF_URL: "zahtev.pdf"         // link ka PDF smernicama (ako je prazno, dugme piše „uskoro")
   };
 </script>
 <style>
@@ -267,7 +267,7 @@
         <div><b id="cd-s">00</b><small id="cd-sl">sekundi</small></div>
       </div>
       <p class="cd-done" id="cd-done" hidden>Rok za prijavu je istekao.</p>
-      <p class="presek"><strong>Ne ostavljajte prijavu za poslednji čas.</strong> Interni presek liste pravimo u <b>15:00</b>, pa vas molimo da do tada pošaljete email Ambasadi i upišete se ovde.</p>
+      <p class="presek"><strong>Ne ostavljajte prijavu za poslednji čas.</strong> Interni presek liste pravimo u <b>15:00</b>, pa vas molimo da do tada pošaljete email Ambasadi i javite nam se u grupi.</p>
     </aside>
   </section>
 
@@ -278,7 +278,7 @@
 
   <div class="notice" role="note">
     <span class="mark" aria-hidden="true">✳</span>
-    <p><strong>Rok: subota, 3. oktobar u 19:00 (vreme u Brazilu), a interni presek liste je u 15:00.</strong> Na listu se mogu upisati samo građani koji su prethodno poslali prijavu na <span class="email-text">embaixadaservia@terra.com.br</span>. Upis na ovaj sajt ne zamenjuje prijavu Ambasadi.</p>
+    <p><strong>Rok: subota, 3. oktobar u 19:00 (vreme u Brazilu), a interni presek liste je u 15:00.</strong> Na listu dodajemo samo građane koji su prethodno poslali prijavu na <span class="email-text">embaixadaservia@terra.com.br</span>. Ova lista ne zamenjuje prijavu Ambasadi.</p>
   </div>
 
   <div class="grid">
@@ -291,7 +291,7 @@
           <li><div>Pošaljite prijavu na email Ambasade:
             <div class="mailbox"><code class="email-text">embaixadaservia@terra.com.br</code><button class="copy" type="button" id="copy-email">Kopiraj</button></div>
           </div></li>
-          <li><div>Nakon slanja emaila, upišite se na listu ispod.</div></li>
+          <li><div>Nakon slanja emaila javite nam se u grupi, pa vas dodajemo na listu.</div></li>
         </ol>
         <div class="step-actions">
           <a class="btn" id="btn-uputstvo" href="#koraci">Pročitaj uputstvo <span aria-hidden="true">↗</span></a>
@@ -300,59 +300,29 @@
         </div>
       </section>
 
-      <section class="card" id="upis">
-        <h2>Upis na listu</h2>
-        <p class="sub">Upišite se tek kada pošaljete prijavu Ambasadi.</p>
-        <form id="form" novalidate>
-          <div class="row2">
-            <label class="f" for="ime">Ime
-              <input type="text" id="ime" name="ime" autocomplete="given-name" maxlength="40" required placeholder="npr. Milica">
-            </label>
-            <label class="f" for="prezime">Prezime
-              <input type="text" id="prezime" name="prezime" autocomplete="family-name" maxlength="40" required placeholder="npr. Jovanović">
-            </label>
-          </div>
-          <label class="f" for="mesto">Mesto u Brazilu <span class="opt">(nije obavezno)</span>
-            <input type="text" id="mesto" name="mesto" list="gradovi" maxlength="50" placeholder="npr. São Paulo">
-          </label>
-          <datalist id="gradovi">
-            <option value="São Paulo"></option><option value="Rio de Janeiro"></option><option value="Brasília"></option>
-            <option value="Belo Horizonte"></option><option value="Curitiba"></option><option value="Porto Alegre"></option>
-            <option value="Florianópolis"></option><option value="Salvador"></option><option value="Recife"></option>
-            <option value="Fortaleza"></option><option value="Campinas"></option><option value="Santos"></option>
-          </datalist>
-          <div class="hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
-          <label class="consent" for="saglasnost">
-            <input type="checkbox" id="saglasnost" name="saglasnost" required>
-            <span>Potvrđujem da sam poslao/la prijavu Ambasadi i saglasan/na sam da se moje ime, prezime i mesto javno prikažu na listi.</span>
-          </label>
-          <button class="btn primary" type="submit" id="submit">Upiši me na listu</button>
-          <p class="msg" id="msg" role="status" aria-live="polite"></p>
-        </form>
-      </section>
     </div>
 
     <section class="card" id="lista">
       <div class="list-head">
         <div>
           <h2>Lista prijavljenih</h2>
-          <p class="sub">Građani koji su poslali prijavu Ambasadi i pristali da budu javno prikazani.</p>
+          <p class="sub">Građani koji su poslali prijavu Ambasadi. Radi privatnosti prikazujemo samo inicijale.</p>
         </div>
         <span class="pill" id="pill">0 osoba</span>
       </div>
       <div class="search">
         <label class="f" for="trazi"><span class="hp">Pretraga</span>
-          <input type="text" id="trazi" placeholder="Pretraži po imenu ili mestu…" autocomplete="off">
+          <input type="text" id="trazi" placeholder="Pretraži po inicijalima ili mestu…" autocomplete="off">
         </label>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>Ime i prezime</th><th>Mesto u Brazilu</th><th class="date">Upisan/a</th></tr></thead>
+          <thead><tr><th>#</th><th>Inicijali</th><th>Mesto u Brazilu</th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
         <div class="empty" id="empty">
           <strong>Lista je spremna za prve prijave</strong>
-          Budite prvi: pošaljite prijavu Ambasadi, pa se upišite.
+          Pošaljite prijavu Ambasadi i javite nam se u grupi.
         </div>
       </div>
     </section>
@@ -375,7 +345,7 @@
   let rows = [];
   let freshKey = null;
   let backend = null;      // izabrani izvor podataka
-  let canWrite = true;
+  let canWrite = false;   // upis i dopune radi samo admin u Google tabeli
 
   // ---- Linkovi / dugmad ----
   document.querySelectorAll(".email-text").forEach((el) => (el.textContent = C.EMAIL));
@@ -432,10 +402,11 @@
       else if (canWrite) { tdName.append(" "); tdName.appendChild(addButton(r, "prezime")); }
       const tdCity = td(r.mesto || "", "city");
       if (!r.mesto && canWrite) tdCity.replaceChildren(addButton(r, "mesto"));
-      tr.append(tdN, tdName, tdCity, td(fmtDate(r.vreme) || "—", "date"));
+      if (r.inicijali) nameSpan.textContent = r.inicijali;
+      tr.append(tdN, tdName, tdCity);
       tbody.appendChild(tr);
     });
-    if (rows.length === 0 && backend && $("empty").textContent.startsWith("Učitavam")) $("empty").innerHTML = "<strong>Lista je spremna za prve prijave</strong>Budite prvi: pošaljite prijavu Ambasadi, pa se upišite.";
+    if (rows.length === 0 && backend && $("empty").textContent.startsWith("Učitavam")) $("empty").innerHTML = "<strong>Lista je spremna za prve prijave</strong>Pošaljite prijavu Ambasadi i javite nam se u grupi.";
     $("empty").hidden = rows.length > 0;
   }
   function td(t, c) { const el = document.createElement("td"); if (c) el.className = c; el.textContent = t; return el; }
@@ -597,7 +568,7 @@
 
   function setReadOnly() {
     canWrite = false;
-    $("upis").hidden = true;
+    if ($("upis")) $("upis").hidden = true;
     render();
   }
 
@@ -622,7 +593,7 @@
   // ---- Upis ----
   const msg = (t, cls) => { $("msg").textContent = t; $("msg").className = "msg " + (cls || ""); };
 
-  $("form").addEventListener("submit", async (e) => {
+  if ($("form")) $("form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const entry = {
       ime: clean($("ime").value, 40),
