@@ -9,10 +9,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Figtree:wght@400;500;600;700&display=swap">
 <script>
   // ====== PODEŠAVANJA ======
-  // API_URL: link Google Apps Script web aplikacije (vidi README.md).
-  // Dok je prazan, sajt radi u DEMO režimu i upisi se čuvaju samo u ovom pregledaču.
+  // API_URL (link Google skripte) se upisuje u config.js pored ovog fajla:
+  //   window.CONFIG.API_URL = "https://script.google.com/macros/s/.../exec";
+  // Bez njega sajt radi u DEMO režimu i upisi se čuvaju samo u ovom pregledaču.
   window.CONFIG = {
-  API_URL: "https://script.google.com/macros/s/AKfycbxMIs-RgwOKN3FhOlcyoPK4W5P_SEYSnw9gH_tzjo9kFLoQIzERwcoIEmHxhsu-pTs/exec",
+    API_URL: "",
     CILJ: 100,
     ROK: "2026-10-03T19:00:00-03:00",  // rok za prijavu: 3. oktobar u 19:00, vreme u Brazilu (UTC−3); interni presek u 15:00
     EMAIL: "embaixadaservia@terra.com.br",
@@ -20,6 +21,7 @@
     PDF_URL: "zahtev.pdf"         // link ka PDF smernicama (ako je prazno, dugme piše „uskoro")
   };
 </script>
+<script src="config.js"></script>
 <style>
   :root {
     color-scheme: dark;
@@ -267,7 +269,7 @@
         <div><b id="cd-s">00</b><small id="cd-sl">sekundi</small></div>
       </div>
       <p class="cd-done" id="cd-done" hidden>Rok za prijavu je istekao.</p>
-      <p class="presek"><strong>Ne ostavljajte prijavu za poslednji čas.</strong> Interni presek liste pravimo u <b>15:00</b>, pa vas molimo da do tada pošaljete email Ambasadi i javite nam se u grupi.</p>
+      <p class="presek"><strong>Ne ostavljajte prijavu za poslednji čas.</strong> Interni presek liste pravimo u <b>15:00</b>, pa vas molimo da do tada pošaljete email Ambasadi i upišete se ovde.</p>
     </aside>
   </section>
 
@@ -278,7 +280,7 @@
 
   <div class="notice" role="note">
     <span class="mark" aria-hidden="true">✳</span>
-    <p><strong>Rok: subota, 3. oktobar u 19:00 (vreme u Brazilu), a interni presek liste je u 15:00.</strong> Na listu dodajemo samo građane koji su prethodno poslali prijavu na <span class="email-text">embaixadaservia@terra.com.br</span>. Ova lista ne zamenjuje prijavu Ambasadi.</p>
+    <p><strong>Rok: subota, 3. oktobar u 19:00 (vreme u Brazilu), a interni presek liste je u 15:00.</strong> Na listu se mogu upisati samo građani koji su prethodno poslali prijavu na <span class="email-text">embaixadaservia@terra.com.br</span>. Upis na ovaj sajt ne zamenjuje prijavu Ambasadi.</p>
   </div>
 
   <div class="grid">
@@ -291,13 +293,44 @@
           <li><div>Pošaljite prijavu na email Ambasade:
             <div class="mailbox"><code class="email-text">embaixadaservia@terra.com.br</code><button class="copy" type="button" id="copy-email">Kopiraj</button></div>
           </div></li>
-          <li><div>Nakon slanja emaila javite nam se u grupi, pa vas dodajemo na listu.</div></li>
+          <li><div>Nakon slanja emaila, upišite se na listu ispod.</div></li>
         </ol>
         <div class="step-actions">
           <a class="btn" id="btn-uputstvo" href="#koraci">Pročitaj uputstvo <span aria-hidden="true">↗</span></a>
           <a class="btn" id="btn-pdf" href="#" target="_blank" rel="noopener">Preuzmi zahtev (PDF) <small id="pdf-note">PDF</small></a>
           <a class="btn" id="btn-mail" href="mailto:embaixadaservia@terra.com.br">Pošalji email Ambasadi <span aria-hidden="true">✉</span></a>
         </div>
+      </section>
+
+      <section class="card" id="upis">
+        <h2>Upis na listu</h2>
+        <p class="sub">Upišite se tek kada pošaljete prijavu Ambasadi. Na listi se prikazuju samo vaši inicijali.</p>
+        <form id="form" novalidate>
+          <div class="row2">
+            <label class="f" for="ime">Ime
+              <input type="text" id="ime" name="ime" autocomplete="given-name" maxlength="40" required placeholder="npr. Milica">
+            </label>
+            <label class="f" for="prezime">Prezime
+              <input type="text" id="prezime" name="prezime" autocomplete="family-name" maxlength="40" required placeholder="npr. Jovanović">
+            </label>
+          </div>
+          <label class="f" for="mesto">Mesto u Brazilu <span class="opt">(nije obavezno, ne prikazuje se javno)</span>
+            <input type="text" id="mesto" name="mesto" list="gradovi" maxlength="50" placeholder="npr. São Paulo">
+          </label>
+          <datalist id="gradovi">
+            <option value="São Paulo"></option><option value="Rio de Janeiro"></option><option value="Brasília"></option>
+            <option value="Belo Horizonte"></option><option value="Curitiba"></option><option value="Porto Alegre"></option>
+            <option value="Florianópolis"></option><option value="Salvador"></option><option value="Recife"></option>
+            <option value="Fortaleza"></option><option value="Campinas"></option><option value="Santos"></option>
+          </datalist>
+          <div class="hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+          <label class="consent" for="saglasnost">
+            <input type="checkbox" id="saglasnost" name="saglasnost" required>
+            <span>Potvrđujem da sam poslao/la prijavu Ambasadi i saglasan/na sam da se moji inicijali javno prikažu na listi.</span>
+          </label>
+          <button class="btn primary" type="submit" id="submit">Upiši me na listu</button>
+          <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        </form>
       </section>
 
     </div>
@@ -312,17 +345,17 @@
       </div>
       <div class="search">
         <label class="f" for="trazi"><span class="hp">Pretraga</span>
-          <input type="text" id="trazi" placeholder="Pretraži po inicijalima ili mestu…" autocomplete="off">
+          <input type="text" id="trazi" placeholder="Pretraži po inicijalima…" autocomplete="off">
         </label>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>Inicijali</th><th>Mesto u Brazilu</th></tr></thead>
+          <thead><tr><th>#</th><th>Inicijali</th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
         <div class="empty" id="empty">
           <strong>Lista je spremna za prve prijave</strong>
-          Pošaljite prijavu Ambasadi i javite nam se u grupi.
+          Budite prvi: pošaljite prijavu Ambasadi, pa se upišite.
         </div>
       </div>
     </section>
@@ -367,7 +400,10 @@
   const clean = (s, max) => String(s || "").replace(/[​-‍⁠﻿]/g, "").replace(/[<>]/g, "").replace(/Ð/g, "Đ").replace(/ð/g, "đ").replace(/\s+/g, " ").trim().slice(0, max);
   const norm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[đð]/gi, "dj").toLowerCase().replace(/\s+/g, " ").trim();
   const keyOf = (r) => norm(r.ime) + "|" + norm(r.prezime);
-  const fullName = (r) => (r.ime + " " + (r.prezime || "")).trim();
+  const initialsOf = (ime, prezime) => (ime + " " + (prezime || "")).split(/\s+/)
+    .filter((w) => w && !["da", "de", "do", "dos", "das", "di", "van", "von"].includes(w))
+    .map((w) => /^(Lj|Nj|Dž|LJ|NJ|DŽ)/.test(w) ? w[0].toUpperCase() + w[1].toLowerCase() : w[0].toUpperCase()).join(".");
+  const fullName = (r) => ((r.ime || "") + " " + (r.prezime || "")).trim();
   const osoba = (n) => { const m10 = n % 10, m100 = n % 100; return (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? "osobe" : "osoba"; };
   const ljudi = (n) => (n === 1 ? "čovek" : "ljudi");
   const fmtDate = (v) => { if (!v) return ""; const d = new Date(v); return isNaN(d) ? "" : d.toLocaleDateString("sr-Latn-RS", { day: "numeric", month: "numeric", year: "numeric" }); };
@@ -387,11 +423,12 @@
   }
 
   function renderList() {
-    const q = norm($("trazi").value);
+    const q = norm($("trazi").value).replace(/\./g, "");
     const tbody = $("rows");
     tbody.replaceChildren();
     rows.forEach((r, i) => {
-      if (q && !norm(fullName(r) + " " + (r.mesto || "")).includes(q)) return;
+      const ini = r.inicijali || initialsOf(r.ime || "", r.prezime);
+      if (q && !norm(ini).replace(/\./g, "").includes(q)) return;
       const tr = document.createElement("tr");
       if (keyOf(r) === freshKey) tr.className = "fresh";
       const tdN = td(String(i + 1), "n");
@@ -402,11 +439,11 @@
       else if (canWrite) { tdName.append(" "); tdName.appendChild(addButton(r, "prezime")); }
       const tdCity = td(r.mesto || "", "city");
       if (!r.mesto && canWrite) tdCity.replaceChildren(addButton(r, "mesto"));
-      if (r.inicijali) nameSpan.textContent = r.inicijali;
-      tr.append(tdN, tdName, tdCity);
+      nameSpan.textContent = ini;
+      tr.append(tdN, tdName);
       tbody.appendChild(tr);
     });
-    if (rows.length === 0 && backend && $("empty").textContent.startsWith("Učitavam")) $("empty").innerHTML = "<strong>Lista je spremna za prve prijave</strong>Pošaljite prijavu Ambasadi i javite nam se u grupi.";
+    if (rows.length === 0 && backend && $("empty").textContent.startsWith("Učitavam")) $("empty").innerHTML = "<strong>Lista je spremna za prve prijave</strong>Budite prvi: pošaljite prijavu Ambasadi, pa se upišite.";
     $("empty").hidden = rows.length > 0;
   }
   function td(t, c) { const el = document.createElement("td"); if (c) el.className = c; el.textContent = t; return el; }
@@ -543,7 +580,7 @@
         $("empty").innerHTML = "<strong>Učitavam listu…</strong>";
         api.reload(); setInterval(api.reload, 60000);
       },
-      add: (e) => send(e, (rows) => rows.some((r) => keyOf(r) === keyOf(e))),
+      add: (e) => { const before = last.length; return send(e, (rows) => rows.length > before); },
       patch: (id, field, value) => send({ action: "dopuna", id, field, value }, (rows) => rows.some((r) => r.id === id && String(r[field] || "").trim()))
     };
     return api;
@@ -605,8 +642,6 @@
     if (entry.website) return;
     if (!entry.ime || !entry.prezime) { msg("Upišite ime i prezime.", "err"); (entry.ime ? $("prezime") : $("ime")).focus(); return; }
     if (!entry.saglasnost) { msg("Označite potvrdu da ste poslali prijavu Ambasadi.", "err"); $("saglasnost").focus(); return; }
-    if (rows.some((r) => keyOf(r) === keyOf(entry))) { msg(fullName(entry) + " je već na listi.", "err"); return; }
-    const sameFirst = rows.find((r) => !r.prezime && norm(r.ime) === norm(entry.ime));
     if (!backend) { msg("Lista se još učitava. Pokušajte za trenutak.", "err"); return; }
 
     const btn = $("submit");
@@ -614,9 +649,9 @@
     try {
       const r = await backend.add(entry);
       if (r.ok) {
-        freshKey = keyOf(entry);
+        freshKey = null;
         $("form").reset();
-        msg(sameFirst ? "Upisani ste. Ako ste vi „" + sameFirst.ime + "” bez prezimena na listi, samo dopunite prezime tamo." : "Upisani ste na listu. Hvala! ♡", "ok");
+        msg("Upisani ste! Na listi se prikazujete kao " + initialsOf(entry.ime, entry.prezime) + ". Hvala! ♡", "ok");
         if (backend.reload) await backend.reload();
       } else if (r.error === "duplikat") {
         msg("Ova osoba je već na listi.", "err");
