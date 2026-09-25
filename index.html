@@ -12,7 +12,7 @@
   // API_URL: link Google Apps Script web aplikacije (vidi README.md).
   // Dok je prazan, sajt radi u DEMO režimu i upisi se čuvaju samo u ovom pregledaču.
   window.CONFIG = {
-    API_URL: "https://script.google.com/macros/s/AKfycbxMIs-RgwOKN3FhOlcyoPK4W5P_SEYSnw9gH_tzjo9kFLoQIzERwcoIEmHxhsu-pTs/exec",
+    API_URL: "",
     CILJ: 100,
     ROK: "2026-10-03T19:00:00-03:00",  // rok za prijavu: 3. oktobar u 19:00, vreme u Brazilu (UTC−3); interni presek u 15:00
     EMAIL: "embaixadaservia@terra.com.br",
@@ -435,6 +435,7 @@
       tr.append(tdN, tdName, tdCity, td(fmtDate(r.vreme) || "—", "date"));
       tbody.appendChild(tr);
     });
+    if (rows.length === 0 && backend && $("empty").textContent.startsWith("Učitavam")) $("empty").innerHTML = "<strong>Lista je spremna za prve prijave</strong>Budite prvi: pošaljite prijavu Ambasadi, pa se upišite.";
     $("empty").hidden = rows.length > 0;
   }
   function td(t, c) { const el = document.createElement("td"); if (c) el.className = c; el.textContent = t; return el; }
@@ -516,14 +517,63 @@
   // 2) samostalni sajt: Google Apps Script
   function sheetBackend(url) {
     let cb = () => {};
-    const post = (body) => fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then((r) => r.json());
+    let last = [];
+    let failed = false;
+    const H = { "Content-Type": "text/plain;charset=utf-8" };
+
+    // Rezervni način čitanja (JSONP) za browsere koji blokiraju fetch ka Google-u
+    function jsonp() {
+      return new Promise((resolve, reject) => {
+        const name = "srbiCb" + Date.now() + Math.floor(Math.random() * 1e4);
+        const tag = document.createElement("script");
+        const timer = setTimeout(() => { done(); reject(new Error("timeout")); }, 20000);
+        function done() { clearTimeout(timer); try { delete window[name]; } catch {} tag.remove(); }
+        window[name] = (d) => { done(); resolve(d); };
+        tag.onerror = () => { done(); reject(new Error("load")); };
+        tag.src = url + "?callback=" + name + "&t=" + Date.now();
+        document.head.appendChild(tag);
+      });
+    }
+
+    async function read() {
+      try { const d = await (await fetch(url, { cache: "no-store" })).json(); if (d.ok) return d.rows || []; } catch {}
+      const d = await jsonp();
+      if (!d || !d.ok) throw new Error("bad");
+      return d.rows || [];
+    }
+
+    // Upis: običan POST; ako browser ne pusti odgovor, šalje se „naslepo" pa se proveri na listi
+    async function send(body, confirmed) {
+      try {
+        const r = await fetch(url, { method: "POST", headers: H, body: JSON.stringify(body) });
+        return await r.json();
+      } catch {
+        await fetch(url, { method: "POST", mode: "no-cors", headers: H, body: JSON.stringify(body) });
+        await new Promise((r) => setTimeout(r, 1500));
+        await api.reload();
+        return confirmed(last) ? { ok: true } : { ok: false, error: "Upis nije potvrđen. Osvežite stranicu i proverite listu." };
+      }
+    }
+
     const api = {
       async reload() {
-        try { const d = await (await fetch(url, { cache: "no-store" })).json(); if (d.ok) cb(d.rows || []); } catch (e) { console.warn(e); }
+        try {
+          last = await read();
+          if (failed) { failed = false; $("demo-note").hidden = true; }
+          cb(last);
+        } catch (e) {
+          failed = true;
+          showNote("<strong>Lista trenutno ne može da se učita.</strong> Osvežite stranicu za minut. Ako se ne popravi, otvorite sajt u drugom browseru.");
+          $("empty").hidden = true;
+        }
       },
-      start(onRows) { cb = onRows; api.reload(); setInterval(api.reload, 60000); },
-      add: (e) => post(e),
-      patch: (id, field, value) => post({ action: "dopuna", id, field, value })
+      start(onRows) {
+        cb = onRows;
+        $("empty").innerHTML = "<strong>Učitavam listu…</strong>";
+        api.reload(); setInterval(api.reload, 60000);
+      },
+      add: (e) => send(e, (rows) => rows.some((r) => keyOf(r) === keyOf(e))),
+      patch: (id, field, value) => send({ action: "dopuna", id, field, value }, (rows) => rows.some((r) => r.id === id && String(r[field] || "").trim()))
     };
     return api;
   }
