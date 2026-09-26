@@ -133,6 +133,17 @@
   .copy { font: 600 12px var(--sans); color: var(--gold); background: none; border: 0; cursor: pointer; padding: 4px 2px; }
   .step-actions { display: grid; gap: 8px; }
   .step-actions .btn { justify-content: space-between; width: 100%; }
+  .card, .stack, .grid > * { min-width: 0; }
+  .docs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 4px; }
+  .doc { display: flex; flex-direction: column; gap: 4px; padding: 14px 14px 12px; border-radius: 12px; text-decoration: none; border: 1px solid transparent; transition: transform .15s, filter .15s; }
+  .doc:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  .doc b { font: 700 17px/1.2 var(--serif); overflow-wrap: anywhere; }
+  .doc small { font-size: 12px; font-weight: 600; opacity: .8; }
+  .doc-tag { align-self: flex-start; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 7px; border-radius: 999px; }
+  .doc-must { background: #C6363C; color: #fff; }
+  .doc-must .doc-tag { background: #fff; color: #C6363C; }
+  .doc-form { background: var(--gold); color: var(--gold-ink); }
+  .doc-form .doc-tag { background: var(--gold-ink); color: var(--gold); }
   .step-actions .hint { margin: -2px 2px 0; color: var(--faint); font-size: 12px; }
 
   /* Form */
@@ -290,15 +301,26 @@
         <h2>Kako da se prijavite</h2>
         <p class="sub">Tri koraka do upisa na zajedničku listu.</p>
         <ol class="steps">
-          <li><div>Pročitajte uputstvo Ambasade i preuzmite zahtev za glasanje u inostranstvu.</div></li>
+          <li><div>Obavezno pročitajte <b>uputstvo</b> i popunite <b>zahtev za glasanje</b> (oba dokumenta su ispod).</div></li>
           <li><div>Pošaljite prijavu na email Ambasade:
             <div class="mailbox"><code class="email-text">embaixadaservia@terra.com.br</code><button class="copy" type="button" id="copy-email">Kopiraj</button></div>
           </div></li>
           <li><div>Nakon slanja emaila, upišite se na listu ispod.</div></li>
         </ol>
         <div class="step-actions">
-          <a class="btn" id="btn-uputstvo" href="#koraci">Pročitaj uputstvo <span aria-hidden="true">↗</span></a>
-          <a class="btn" id="btn-pdf" href="#" target="_blank" rel="noopener">Preuzmi zahtev (PDF) <small id="pdf-note">PDF</small></a>
+          <div class="docs">
+            <a class="doc doc-must" href="uputstvo.pdf" target="_blank" rel="noopener">
+              <span class="doc-tag">Obavezno pročitati</span>
+              <b>Uputstvo</b>
+              <small>PDF ↓</small>
+            </a>
+            <a class="doc doc-form" id="btn-pdf" href="zahtev.pdf" target="_blank" rel="noopener">
+              <span class="doc-tag">Popuniti i poslati</span>
+              <b>Zahtev za glasanje</b>
+              <small id="pdf-note">PDF ↓</small>
+            </a>
+          </div>
+          <a class="btn" id="btn-uputstvo" href="#koraci">Stranica Ambasade o izborima <span aria-hidden="true">↗</span></a>
           <a class="btn" id="btn-mail" href="mailto:embaixadaservia@terra.com.br">Pošalji email Ambasadi <span aria-hidden="true">✉</span></a>
           <a class="btn" id="btn-spisak" href="https://upit.birackispisak.gov.rs/" target="_blank" rel="noopener">Proveri upis u birački spisak <span aria-hidden="true">↗</span></a>
           <p class="hint">Ovde možete da proverite da li ste upisani u jedinstveni birački spisak.</p>
